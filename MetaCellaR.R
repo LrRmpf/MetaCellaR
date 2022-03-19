@@ -10,6 +10,7 @@ library(data.table)
 library(ggplot2)
 library(ggdendro)
 library(cowplot)
+library(Matrix)
 ########################
 summary_method <- "kmed_means" #kmed
 iter_flag <- F
@@ -651,11 +652,11 @@ if(length(assay_hit)){
 	for(i in seq(length(uniq_mc))){
 		hits <- atac2metacell_info$barcode[which(atac2metacell_info$metacell == uniq_mc[i])];
 		if(length(hits) > 1){
-			atac_metacell <- cbind(atac_metacell, rowMeans(as.matrix(ATACcounts)[, hits]))
-			atac_metacell_sum <- cbind(atac_metacell_sum, rowSums(as.matrix(ATACcounts)[, hits]))
+			atac_metacell <- cbind(atac_metacell, Matrix::rowMeans(ATACcounts[, hits]))
+			atac_metacell_sum <- cbind(atac_metacell_sum, Matrix::rowSums(ATACcounts[, hits]))
 		}else{
-			atac_metacell <- cbind(atac_metacell, as.matrix(ATACcounts)[, hits])
-			atac_metacell_sum <- cbind(atac_metacell_sum, as.matrix(ATACcounts)[, hits])
+			atac_metacell <- cbind(atac_metacell, ATACcounts[, hits])
+			atac_metacell_sum <- cbind(atac_metacell_sum, ATACcounts[, hits])
 		}
 	}
 	colnames(atac_metacell) <- uniq_mc
